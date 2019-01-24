@@ -191,7 +191,7 @@ if __name__ == '__main__':
     ## Number of hidden layers = 512
     model.add(Dense(512, activation='relu', input_dim=flat_dim))
     #adding the Dropout helps prevent overfitting. rate: float between 0 and 1. Fraction of the input units to drop.
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.2))
     #we have 10 classes
     model.add(Dense(10, activation='softmax'))
 
@@ -214,10 +214,10 @@ if __name__ == '__main__':
     print('working on training the model')
     history = model.fit(train_features,
                     train_labels,
-                    epochs=2,
+                    epochs=50,
                     batch_size=batch_size,
                     shuffle=True,
-                    validation_split=0.0)
+                    validation_split=0.1)
                     # ,
                     # callbacks=callbacks)
 
