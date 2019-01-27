@@ -1,33 +1,3 @@
-# import math                      # providing access to the mathematical functions defined by the C standard
-# import matplotlib.pyplot as plt  # plotting library
-# import scipy                     # scientific computnig and technical computing
-# import cv2                       # working with, mainly resizing, images
-# import numpy as np               # dealing with arrays
-# import glob                      # return a possibly-empty list of path names that match pathname
-# import os                        # dealing with directories
-# import pandas as pd              # providing data structures and data analysis tools
-# import tensorflow as tf
-# import itertools
-# import random
-# from random import shuffle       # mixing up or currently ordered data that might lead our network astray in training.
-# from tqdm import tqdm            # a nice pretty percentage bar for tasks. Thanks to viewer Daniel Bühler for this suggestion
-# from PIL import Image
-# from scipy import ndimage
-# from pathlib import Path
-# from sklearn.metrics import classification_report, confusion_matrix
-# from sklearn import metrics
-# from IPython import get_ipython
-# # get_ipython().magic('matplotlib inline')
-# np.random.seed(1)
-# import datetime as dt
-#
-#
-# from keras.preprocessing.image import ImageDataGenerator # need
-# from keras.callbacks import ReduceLROnPlateau # need
-# from keras.layers import Conv2D, MaxPooling2D, Activation, Dropout, Flatten, Dense
-# from keras.callbacks import ModelCheckpoint, EarlyStopping
-# from keras.applications import Xception
-# from keras.utils import to_categorical
 import cv2
 import datetime as dt
 import glob
@@ -43,6 +13,7 @@ from pathlib import Path
 from sklearn.metrics import confusion_matrix
 from keras.models import Sequential
 from keras.layers import Dropout, Dense
+import csv
 
 
 
@@ -59,6 +30,8 @@ if __name__ == '__main__':
     print('this is main!')
     cols = ['Label','Latin Name', 'Common Name','Train Images', 'Validation Images']
     labels = pd.read_csv("./10-monkey-species/monkey_labels.txt", names=cols, skiprows=1)
+
+
 
     #paths
     train_dir = Path('./training-resized/')
@@ -191,7 +164,7 @@ if __name__ == '__main__':
     ## Number of hidden layers = 512
     model.add(Dense(512, activation='relu', input_dim=flat_dim))
     #adding the Dropout helps prevent overfitting. rate: float between 0 and 1. Fraction of the input units to drop.
-    model.add(Dropout(0.2))
+    model.add(Dropout(0.5))
     #we have 10 classes
     model.add(Dense(10, activation='softmax'))
 
@@ -214,12 +187,11 @@ if __name__ == '__main__':
     print('working on training the model')
     history = model.fit(train_features,
                     train_labels,
-                    epochs=50,
+                    epochs=20,
                     batch_size=batch_size,
                     shuffle=True,
-                    validation_split=0.1)
-                    # ,
-                    # callbacks=callbacks)
+                    validation_split=0.1,
+                    callbacks=callbacks)
 
 
     preds = model.predict(test_features)
